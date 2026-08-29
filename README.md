@@ -64,5 +64,19 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Tastewise is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://www.nasdaqprivatemarket.com/
+Tastewise is a food and beverage consumer-intelligence platform that reads live demand across
+social posts, recipes, restaurant menus and retail data for product-innovation, marketing,
+foodservice and retail-sales teams at CPG brands.
+
+Tastewise sells a commercial REST API, documented publicly at `docs.tastewise.io` and served from
+`api.tastewise.io`, covering recipes, ingredients, dishes, restaurants, menus, consumer
+motivations, content discovery, trend validation and trend performance, plus an embedded widgets
+surface and bulk product-list operations with webhook callbacks. Authentication is a bearer API
+key paired with an `X-Customer-Id` header, and each route requires a named permission granted per
+contract. No machine-readable OpenAPI is published.
+
+- Website: https://tastewise.io/
+- API reference: https://docs.tastewise.io/
+- API base URL: https://api.tastewise.io
+- Pricing: https://tastewise.io/pricing
+- Trust and compliance: https://tastewise.io/trust

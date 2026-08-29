@@ -1,0 +1,161 @@
+generated: '2026-08-29'
+method: derived
+status: candidate
+source: https://docs.tastewise.io/
+note: >-
+  Tastewise ADVERTISES an MCP server. Its integrations page lists "Tastewise MCP — Open agent
+  protocol that plugs Tastewise into any AI client", alongside ChatGPT, Claude, Gemini,
+  Microsoft Copilot and Perplexity. No endpoint URL, install command or package is published
+  anywhere public, and every probe for one missed (see probes below). The tools[] list here is
+  DERIVED from the provider's own documented REST operations as a candidate mapping — it is
+  NOT the vendor's tool list, and no endpoint has been invented.
+advertised:
+  claimed: true
+  claim: Tastewise MCP — Open agent protocol that plugs Tastewise into any AI client
+  claim_url: https://tastewise.io/integrations
+  claim_http_status: 200
+  endpoint_published: false
+  assessment: >-
+    Announced as a product capability but not publicly reachable or documented. Most likely
+    provisioned per-customer behind the same account/permission wall as the REST API. An agent
+    cannot connect to Tastewise over MCP from public information alone.
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: unknown
+  verified: probed
+probes:
+- url: https://mcp.tastewise.io/
+  status: 000
+  result: DNS does not resolve (NXDOMAIN)
+- url: https://mcp.tastewise.io/mcp
+  status: 000
+  result: DNS does not resolve (NXDOMAIN)
+- url: https://api.tastewise.io/mcp
+  status: 403
+  result: AWS API Gateway MissingAuthenticationTokenException — no MCP route matched
+  method: POST tools/list
+- url: https://api.tastewise.io/v1/mcp
+  status: 403
+  result: AWS API Gateway MissingAuthenticationTokenException
+  method: POST tools/list
+- url: https://tastewise.io/mcp
+  status: 404
+  result: WordPress 404
+  method: POST tools/list
+- url: https://app.tastewise.io/mcp
+  status: 200
+  result: SPA catch-all HTML shell (87328 bytes) — not an MCP endpoint
+  method: POST tools/list
+registry_checks:
+- registry: npm
+  query: tastewise
+  result: no first-party MCP package published
+tools_note: >-
+  Candidate tools derived one-per-documented-operation from https://docs.tastewise.io/.
+  source_operation references the documented HTTP route because Tastewise publishes no
+  OpenAPI to reference an operationId in.
+tools:
+- name: get_popular_recipes
+  description: Retrieve popular recipes by country, language and search term.
+  source_operation: 'GET https://api.tastewise.io/recipes/popular'
+- name: get_trending_recipes
+  description: Retrieve trending recipes.
+  source_operation: 'GET https://api.tastewise.io/recipes/trending'
+- name: get_trending_ingredients
+  description: Retrieve trending ingredients.
+  source_operation: 'GET https://api.tastewise.io/recipes/ingredients/trending'
+- name: get_popular_ingredients
+  description: Retrieve popular ingredients.
+  source_operation: 'GET https://api.tastewise.io/recipes/ingredients/popular'
+- name: get_trending_dishes
+  description: Retrieve trending dishes.
+  source_operation: 'GET https://api.tastewise.io/recipes/dishes/trending'
+- name: get_popular_dishes
+  description: Retrieve popular dishes.
+  source_operation: 'GET https://api.tastewise.io/recipes/dishes/popular'
+- name: get_side_dishes
+  description: Retrieve side dishes for a dish.
+  source_operation: 'GET https://api.tastewise.io/recipes/side_dishes'
+- name: get_motivations
+  description: Retrieve consumer motivations behind a food term.
+  source_operation: 'GET https://api.tastewise.io/motivations'
+- name: get_content_discovery
+  description: Retrieve social media content signals for a term.
+  source_operation: 'GET https://api.tastewise.io/content_discovery'
+- name: validate_trend
+  description: Validate whether a term is a real, growing trend.
+  source_operation: 'GET https://api.tastewise.io/trend_validation'
+- name: get_trend_performance
+  description: Retrieve trend performance over time.
+  source_operation: 'GET https://api.tastewise.io/trend_performance'
+- name: search_restaurants
+  description: Search restaurants by market, cuisine, status and other filters.
+  source_operation: 'GET https://api.tastewise.io/restaurants'
+- name: get_restaurant
+  description: Retrieve details for one restaurant by id.
+  source_operation: 'GET https://api.tastewise.io/restaurants/:id'
+- name: get_restaurant_menus
+  description: Retrieve a restaurant's menus.
+  source_operation: 'GET https://api.tastewise.io/restaurants/:id/menus'
+- name: get_restaurant_ingredients
+  description: Retrieve a restaurant's ingredients.
+  source_operation: 'GET https://api.tastewise.io/restaurants/:id/ingredients'
+- name: get_restaurant_signals
+  description: Retrieve signals for a restaurant.
+  source_operation: 'GET https://api.tastewise.io/restaurants/:id/signals'
+- name: restaurant_has_new_signals
+  description: Check whether a restaurant has new signals versus the previous month.
+  source_operation: 'GET https://api.tastewise.io/restaurants/:id/signals/hasUpdates'
+- name: get_last_month_restaurant_data
+  description: Retrieve last month's restaurant dataset.
+  source_operation: 'GET https://api.tastewise.io/restaurants/last_month'
+- name: match_restaurant
+  description: Match an external restaurant record to a Tastewise restaurant (Beta).
+  source_operation: 'GET https://api.tastewise.io/restaurants/match'
+- name: get_bestsellers
+  description: Retrieve bestseller analysis (US only).
+  source_operation: 'GET https://api.tastewise.io/restaurants/bestsellers'
+- name: get_price_analysis
+  description: Retrieve price analysis (US only, Beta).
+  source_operation: 'GET https://api.tastewise.io/restaurants/pricingAnalysis'
+- name: get_menus
+  description: Retrieve menu item details.
+  source_operation: 'GET https://api.tastewise.io/menus'
+- name: get_menu_insights
+  description: Retrieve menu insights.
+  source_operation: 'GET https://api.tastewise.io/menu_insights'
+- name: get_flavor_combination
+  description: Retrieve flavor pairing analysis for an ingredient.
+  source_operation: 'GET https://api.tastewise.io/flavor_combination'
+- name: get_insights
+  description: Retrieve combined insights across social, menu and recipe volumes for a term.
+  source_operation: 'GET https://api.tastewise.io/insights'
+- name: search_operations
+  description: Search combined restaurant and K12 foodservice operations.
+  source_operation: 'GET https://api.tastewise.io/operations'
+- name: get_product_list
+  description: Retrieve the customer's product list.
+  source_operation: 'GET https://api.tastewise.io/restaurants/productList'
+- name: add_product
+  description: Add a product to the customer's product list.
+  source_operation: 'POST https://api.tastewise.io/restaurants/productList'
+  write: true
+- name: delete_product
+  description: Delete a product from the customer's product list.
+  source_operation: 'DELETE https://api.tastewise.io/restaurants/productList'
+  write: true
+- name: query_widget
+  description: Run an embedded widget analytics query.
+  source_operation: 'POST https://api.tastewise.io/widgets'
+- name: ping
+  description: Health check; no authentication required.
+  source_operation: 'GET https://api.tastewise.io/ping'
+x-evidence:
+  fetched: '2026-08-29'
+  integrations_url: https://tastewise.io/integrations
+  integrations_http_status: 200
+  docs_url: https://docs.tastewise.io/
+  docs_http_status: 200

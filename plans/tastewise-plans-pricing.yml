@@ -1,0 +1,40 @@
+generated: '2026-08-29'
+method: searched
+source: https://tastewise.io/pricing
+plan_count: 0
+pricing_public: false
+model: enterprise-quote-only
+note: >-
+  Tastewise publishes NO priced tiers. The pricing page carries a custom-proposal calculator
+  and a "Get custom pricing" call to action, but names no plan, no price and no currency.
+  Quoted from the page: "Plans scale with modules and market coverage. Use the calculator to
+  build a tailored proposal." Positioning is "Enterprise plans built for big CPG orgs, global
+  teams, and multi-brand portfolios." plan_count is 0 as an honest measurement, not an
+  omission.
+plans: []
+pricing_dimensions_named:
+- modules selected
+- market coverage
+- team access levels
+- brief volume
+api_pricing:
+  published: false
+  note: >-
+    The API is sold as a premium add-on rather than a listed plan. Tastewise markets a
+    "Foodservice API" as "a premium solution available upon request." API route access is
+    granted per named permission on the customer's account (see
+    authentication/tastewise-authentication.yml), and the docs route rate-limit increases
+    through a Customer Success Representative — so both entitlement and quota are contractual,
+    not self-serve.
+  quota_coupling: >-
+    Documented plan coupling is visible in the API itself: the recipes `limit` parameter is
+    "Capped at a number determined in your plan."
+self_serve_signup: false
+free_tier: false
+trial: >-
+  No free trial or self-serve signup is offered; the conversion path is "Book a demo" /
+  "Request a tailored proposal".
+x-evidence:
+  fetched: '2026-08-29'
+  url: https://tastewise.io/pricing
+  http_status: 200

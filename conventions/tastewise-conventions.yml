@@ -1,0 +1,138 @@
+generated: '2026-08-29'
+method: searched
+source: https://docs.tastewise.io/
+docs: https://docs.tastewise.io/
+note: >-
+  Cross-cutting runtime semantics read from the provider's published API reference. Where a
+  convention is absent it is recorded as absent — Tastewise documents rate limiting, paging,
+  caching and search syntax thoroughly, but publishes no idempotency, versioning or
+  request-tracing contract.
+authentication:
+  style: bearer-api-key + tenant header
+  headers:
+  - Authorization: Bearer <api-key>
+  - X-Customer-Id: <customer-id>
+  detail: authentication/tastewise-authentication.yml
+idempotency:
+  supported: false
+  header: null
+  evidence: >-
+    The API reference documents no Idempotency-Key header, no request-deduplication window
+    and no replay semantics. The write surface (POST /restaurants/productList,
+    POST /operations/productList, the bulk variants, DELETE /restaurants/productList) is
+    documented without any idempotency guarantee, so a retried bulk import is not safe to
+    assume duplicate-free.
+  consequence_for_agents: >-
+    An agent retrying a failed POST cannot rely on the server to deduplicate; it must track
+    submitted SKUs itself.
+pagination:
+  style: offset-page
+  params:
+  - name: page
+    description: Page number. Capped at 5 on /restaurants/pricingAnalysis.
+  - name: page_size
+    description: Results per page. Used by /restaurants, /operations.
+  - name: results_per_page
+    description: Alternate name used by the menus endpoints (default 50).
+  - name: limit
+    description: Maximum results, used by the recipes family; capped by plan.
+  ceilings: rate-limits/tastewise-rate-limits.yml
+  inconsistency: >-
+    Three different parameter names govern page size across the surface (page_size,
+    results_per_page, limit) — a real ergonomic wrinkle for a client generator.
+  notes:
+  - On /restaurants, setting the one-item-per-chain flag disables the page parameter entirely.
+sorting:
+  params: [sort_by, sort_order]
+  applies_to: [/restaurants]
+filtering:
+  multiple_value_params: documented — repeated/multi-value query parameters are supported
+  range_params: documented — range query parameters are supported
+  encoding: all query parameters must be UTF-8 encoded
+  measuring_system: metric throughout
+search_syntax:
+  supported: true
+  operators:
+  - AND
+  - OR
+  - NOT
+  - exact search
+  - exact search AND term
+  docs: https://docs.tastewise.io/
+versioning:
+  scheme: none
+  current: null
+  evidence: >-
+    Paths are unversioned (https://api.tastewise.io/recipes/popular, not /v1/...). No version
+    header, no date-pinned version, and no version negotiation is documented. Breaking-change
+    policy is not published.
+request_tracing:
+  request_id_header: null
+  evidence: No correlation/request-id header is documented on requests or responses.
+rate_limit_signaling:
+  headers: [X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset]
+  exhaustion_status: 429
+  retry_hint: retry_after field in the response body (not a Retry-After header)
+  detail: rate-limits/tastewise-rate-limits.yml
+error_envelope:
+  shape: vendor JSON {error, message, retry_after}
+  rfc9457: false
+  detail: errors/tastewise-problem-types.yml
+caching:
+  server_side: Redis, 5-15 minutes on most GET endpoints
+  excluded: [/flavor_combination, /restaurants/match, /campbells, all writes]
+  detail: rate-limits/tastewise-rate-limits.yml
+reversibility:
+  applicable: true
+  grade: documented
+  rationale: >-
+    A reversal path exists and is documented, but no window is stated anywhere in the
+    reference, so this grades `documented` (0.4) rather than `verified` (1.0). Recording a
+    window here would be an invention.
+  read_only: false
+  write_surface:
+  - operation: Add Product
+    method: POST
+    path: /restaurants/productList
+    reversal:
+      operation: Delete Product
+      method: DELETE
+      path: /restaurants/productList
+      window: null
+      window_stated: false
+    docs: https://docs.tastewise.io/
+  - operation: Bulk Add Products
+    method: POST
+    path: /restaurants/productList/bulk
+    reversal:
+      operation: Delete Product
+      method: DELETE
+      path: /restaurants/productList
+      window: null
+      window_stated: false
+      note: >-
+        Reversal is per-product only; no bulk delete or batch-rollback operation is
+        documented, so undoing a 1000-item bulk import means up to 1000 delete calls against
+        a 10-request-per-minute bulk tier.
+    docs: https://docs.tastewise.io/
+  - operation: Add Product (operations)
+    method: POST
+    path: /operations/productList
+    reversal:
+      operation: Delete Product (operations)
+      method: DELETE
+      path: /operations/productList
+      window: null
+      window_stated: false
+    docs: https://docs.tastewise.io/
+  gaps:
+  - No stated reversal window for any write operation.
+  - No bulk/batch rollback for the bulk import endpoints.
+  - No dry-run or validate-only mode documented on any write operation.
+dry_run_mode:
+  supported: false
+  evidence: No validate-only, preview or dry-run parameter is documented on any write operation.
+x-evidence:
+  fetched: '2026-08-29'
+  url: https://docs.tastewise.io/
+  http_status: 200

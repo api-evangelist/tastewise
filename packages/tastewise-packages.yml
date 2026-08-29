@@ -1,0 +1,74 @@
+generated: '2026-08-29'
+method: searched
+source: npm, PyPI, RubyGems, crates.io registry search + https://docs.tastewise.io/
+note: >-
+  Tastewise publishes NO client SDK for its API in any public registry. The API reference says
+  so directly: "Currently we provide only Shell language binding, but more programming
+  languages can be added on demand." Consumers integrate with raw HTTP/curl. One npm package
+  is published by the company's GitHub org, but it is an Angular UI component fork, not an API
+  client — it is recorded here for completeness and explicitly NOT counted as an SDK, so no
+  SDKs pointer is emitted.
+sdk_count: 0
+api_client_sdks: []
+registries_searched:
+- registry: npm
+  query: tastewise
+  api_clients_found: 0
+  status: 200
+- registry: pypi
+  queries: [tastewise, tastewise-api, tastewise-sdk]
+  api_clients_found: 0
+  status: 404
+- registry: rubygems
+  query: tastewise
+  api_clients_found: 0
+  status: 404
+- registry: crates.io
+  query: tastewise
+  api_clients_found: 0
+  status: 200
+- registry: packagist
+  query: tastewise
+  api_clients_found: 0
+- registry: maven-central
+  query: tastewise
+  api_clients_found: 0
+- registry: nuget
+  query: tastewise
+  api_clients_found: 0
+packages:
+- language: javascript
+  registry: npm
+  name: tastewise-ng2-select2
+  url: https://www.npmjs.com/package/tastewise-ng2-select2
+  install: npm install tastewise-ng2-select2
+  version: 9.0.3
+  published: '2020-10-13'
+  official: true
+  api_client: false
+  repository: https://github.com/tastewise/ng2-select2
+  description: >-
+    Angular 2+ wrapper for the select2 widget, forked and republished under the Tastewise npm
+    name. First-party in the sense that it is published from the company's own GitHub org, but
+    it is a front-end UI component with no relationship to the Tastewise API. Last release
+    2020-10-13 — dormant for nearly six years.
+  note: NOT an API client SDK; excluded from sdk_count.
+documented_language_bindings:
+- language: shell
+  form: curl examples in the API reference
+  official: true
+  registry: null
+  version: null
+  published: null
+  note: >-
+    The only binding the provider ships. Quoted from the docs: "Currently we provide only
+    Shell language binding, but more programming languages can be added on demand."
+gaps:
+- No official REST client library in any language or registry.
+- The single first-party npm package is an unrelated UI fork, last published 2020-10-13.
+x-evidence:
+  fetched: '2026-08-29'
+  npm_search: https://registry.npmjs.org/-/v1/search?text=tastewise
+  npm_search_status: 200
+  docs_url: https://docs.tastewise.io/
+  docs_http_status: 200

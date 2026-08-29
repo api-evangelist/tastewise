@@ -1,0 +1,15 @@
+generated: '2026-08-29'
+method: searched
+probe: true
+source: https://tastewise.io/trust
+url: https://tastewise.io/trust
+certifications:
+- ISO 27001
+- ISO 27017
+- GDPR
+evidence:
+- source: https://tastewise.io/trust
+  keywords:
+  - iso 27001
+  - iso/iec 27001
+  - gdpr

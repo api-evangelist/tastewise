@@ -1,0 +1,82 @@
+generated: '2026-08-29'
+method: probed
+source: probed 2026-08-29 across every Tastewise host in apis.yml
+note: >-
+  No Tastewise host serves any /.well-known/ document. Two distinct negative shapes were
+  observed and both are recorded honestly. tastewise.io (WordPress) and help.tastewise.io
+  return real 404s. api.tastewise.io is an AWS API Gateway that answers every unmatched path
+  with HTTP 403 {"message":"Missing Authentication Token"} — an auth wall, not a document.
+  docs.tastewise.io returns 403 for every /.well-known/ path. app.tastewise.io is a
+  single-page Angular application whose catch-all returns HTTP 200 with the SAME 87328-byte
+  HTML shell for EVERY path probed, including paths that cannot exist — it is a soft-404
+  catch-all, NOT a served document surface. Per the pipeline contract those 200s are recorded
+  as misses and NO WellKnown/SecurityTxt pointer is emitted. hit_count is 0.
+hit_count: 0
+hosts:
+- host: https://tastewise.io
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+- host: https://api.tastewise.io
+  note: AWS API Gateway; every unmatched path returns 403 MissingAuthenticationTokenException.
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+  - path: /.well-known/openid-configuration
+    status: 403
+  - path: /.well-known/oauth-authorization-server
+    status: 403
+  - path: /.well-known/oauth-protected-resource
+    status: 403
+  - path: /.well-known/api-catalog
+    status: 403
+  - path: /.well-known/ai-plugin.json
+    status: 403
+- host: https://docs.tastewise.io
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+  - path: /.well-known/openid-configuration
+    status: 403
+  - path: /.well-known/api-catalog
+    status: 403
+- host: https://app.tastewise.io
+  note: >-
+    SPA catch-all. Every path returns 200 with an identical 87328-byte Angular shell.
+    Treated as a miss, not a document.
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    soft_404: true
+    bytes: 87328
+  - path: /.well-known/openid-configuration
+    status: 200
+    soft_404: true
+    bytes: 87328
+  - path: /.well-known/api-catalog
+    status: 200
+    soft_404: true
+    bytes: 87328
+- host: https://help.tastewise.io
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+soft_404_control:
+  host: https://app.tastewise.io
+  probe: /.well-known/agent-card.json
+  status: 200
+  bytes: 87328
+  identical_to_root: true
+  conclusion: catch-all confirmed; no /.well-known/ surface on this host

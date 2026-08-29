@@ -1,0 +1,67 @@
+generated: '2026-08-29'
+method: searched
+source: https://docs.tastewise.io/
+docs: https://docs.tastewise.io/
+format: vendor-json
+rfc9457: false
+note: >-
+  Tastewise publishes an explicit response-code and error-code table in its API reference.
+  Errors are a plain vendor JSON envelope, NOT RFC 9457 application/problem+json — the only
+  error body the docs show in full is the 429, which uses {error, message, retry_after}.
+  Titles and meanings below are quoted verbatim; no remediation text has been invented
+  beyond what the provider states.
+envelope:
+  content_type: application/json
+  fields:
+  - name: error
+    description: Short error label.
+  - name: message
+    description: Human-readable explanation.
+  - name: retry_after
+    description: Seconds to wait before retrying. Observed on 429 only.
+  example: |
+    {
+      "error": "Rate limit exceeded",
+      "message": "Too many requests. Please wait before making another request.",
+      "retry_after": 30
+    }
+success_codes:
+- status: 200
+  meaning: The request has succeeded
+- status: 204
+  meaning: No Content. The request has succeeded, but no data was found
+problems:
+- status: 400
+  title: Bad Request
+  meaning: Your request is invalid.
+  remediation: Check query parameter names, values and UTF-8 encoding against the documented closed lists.
+- status: 401
+  title: Unauthorized
+  meaning: Either the API key, the Customer ID is wrong or you don't have access to the API.
+  remediation: Verify the Authorization bearer key and the X-Customer-Id header.
+- status: 403
+  title: Forbidden
+  meaning: You are not allowed to perform the request.
+  remediation: The account is missing the route permission for this endpoint; permissions are granted per contract.
+- status: 405
+  title: Method Not Allowed
+  meaning: You tried to access the API with an invalid method.
+- status: 429
+  title: Too Many Requests
+  meaning: You're performing too many requests.
+  remediation: Back off exponentially; honor retry_after in the response body.
+  see_also: rate-limits/tastewise-rate-limits.yml
+- status: 500
+  title: Internal Server Error
+  meaning: We had a problem on the back-end. Try again later.
+- status: 503
+  title: Service Unavailable
+  meaning: We're temporarily offline for maintenance. Please try again later.
+gaps:
+  - No machine-readable error type URIs; errors are identified by HTTP status alone.
+  - No application/problem+json (RFC 9457) support.
+  - No stable per-error string codes documented, so an agent cannot branch on anything finer than status.
+x-evidence:
+  fetched: '2026-08-29'
+  url: https://docs.tastewise.io/
+  http_status: 200

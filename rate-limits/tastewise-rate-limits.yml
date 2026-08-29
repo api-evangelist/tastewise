@@ -1,0 +1,91 @@
+generated: '2026-08-29'
+method: searched
+source: https://docs.tastewise.io/
+docs: https://docs.tastewise.io/
+limit_count: 3
+note: >-
+  Tastewise publishes an unusually complete runtime limit contract for a commercial data
+  API: three named rate tiers, the exact response headers, the 429 body shape, a retry_after
+  field, page-size ceilings and a documented cache policy. All values quoted verbatim from
+  the provider's API reference.
+rate_limits:
+- scope: per-api-key
+  endpoint_type: standard
+  limit: 100
+  window: 1m
+  window_human: per minute
+  description: Default limit for standard endpoints.
+- scope: per-api-key
+  endpoint_type: bulk
+  limit: 10
+  window: 1m
+  window_human: per minute
+  description: Bulk operations (/restaurants/productList/bulk, /operations/productList/bulk).
+- scope: per-api-key
+  endpoint_type: search
+  limit: 60
+  window: 1m
+  window_human: per minute
+  description: Search endpoints.
+response_headers:
+- name: X-RateLimit-Limit
+  example: '100'
+  description: Ceiling for the current window.
+- name: X-RateLimit-Remaining
+  example: '95'
+  description: Requests left in the current window.
+- name: X-RateLimit-Reset
+  example: '1642089600'
+  description: Unix epoch seconds at which the window resets.
+exhaustion:
+  status_code: 429
+  status_text: Too Many Requests
+  body_fields:
+  - error
+  - message
+  - retry_after
+  example_body: |
+    {
+      "error": "Rate limit exceeded",
+      "message": "Too many requests. Please wait before making another request.",
+      "retry_after": 30
+    }
+  retry_after_unit: seconds
+  retry_after_location: response body (retry_after), not a Retry-After header
+page_size_limits:
+- endpoint_type: list
+  default: 20-50
+  maximum: 2000
+  unit: items
+- endpoint_type: search
+  default: 20
+  maximum: 100
+  unit: items
+- endpoint_type: bulk
+  default: null
+  maximum: 1000
+  unit: items per batch
+caching:
+  backend: Redis
+  applies_to: most GET endpoints
+  duration: 5-15 minutes depending on endpoint
+  cache_key: generated from request parameters
+  invalidation: automatic on data updates
+  excluded_endpoints:
+  - /flavor_combination
+  - /restaurants/match
+  - /campbells
+  - all POST, PUT and DELETE operations
+guidance:
+  documented_best_practices:
+  - Implement exponential backoff when receiving 429 responses
+  - Cache responses locally to reduce API calls
+  - Use bulk endpoints instead of multiple individual requests
+  - Monitor the rate limit headers to avoid hitting limits
+  raising_limits: >-
+    Higher rate limits are negotiated commercially — the docs direct customers to their
+    Customer Success Representative at Tastewise.
+x-evidence:
+  fetched: '2026-08-29'
+  url: https://docs.tastewise.io/
+  http_status: 200

@@ -1,0 +1,87 @@
+generated: '2026-08-29'
+method: searched
+source: https://docs.tastewise.io/
+docs: https://docs.tastewise.io/
+note: >-
+  Tastewise publishes a real webhook surface but no AsyncAPI document. This artifact captures
+  the webhook catalog verbatim from the provider's API reference and is wired as
+  type: Webhooks. No AsyncAPI has been authored — none is published, and fabricating one
+  would assert an event contract the provider does not ship.
+asyncapi_published: false
+event_surface: webhook-callback
+model: >-
+  Callback-on-completion for asynchronous bulk operations. The caller supplies a webhook URL
+  when invoking a bulk endpoint; Tastewise POSTs a completion payload to it when processing
+  finishes. This is a job-completion callback, not a subscription/event-stream surface —
+  there is no event catalog, no topic namespace and no replay.
+delivery:
+  method: POST
+  transport: https
+  requirement: Webhook URLs must use HTTPS and be publicly accessible.
+  timeout_seconds: 5
+  expected_response: 2xx within 5 seconds
+  retries:
+    attempts: 3
+    strategy: exponential backoff
+    description: Failed webhook deliveries will be retried up to 3 times with exponential backoff.
+  signature_verification:
+    provided: false
+    note: >-
+      The docs do not describe a signing secret or signature header. They advise the consumer
+      to "consider implementing webhook signature verification for security", which places the
+      burden on the receiver without providing a mechanism — a real gap for an agent that must
+      trust the callback.
+webhooks:
+- endpoint: /restaurants/productList/bulk
+  operation: bulk_product_import
+  trigger: When all products are processed
+  method: POST
+- endpoint: /operations/productList/bulk
+  operation: bulk_product_import
+  trigger: When all products are processed
+  method: POST
+payload:
+  content_type: application/json
+  fields:
+  - name: status
+    type: string
+    example: success
+  - name: operation
+    type: string
+    example: bulk_product_import
+  - name: timestamp
+    type: string
+    format: date-time
+    example: '2024-01-15T12:34:56Z'
+  - name: data.processed
+    type: integer
+  - name: data.successful
+    type: integer
+  - name: data.failed
+    type: integer
+  - name: data.errors[]
+    type: array
+    fields: [sku, error]
+  example: |
+    {
+      "status": "success",
+      "operation": "bulk_product_import",
+      "timestamp": "2024-01-15T12:34:56Z",
+      "data": {
+        "processed": 100,
+        "successful": 98,
+        "failed": 2,
+        "errors": [
+          { "sku": "12345", "error": "Invalid product category" }
+        ]
+      }
+    }
+gaps:
+- No AsyncAPI document published.
+- No webhook signing / signature header, so callbacks cannot be authenticated by the receiver.
+- No event catalog beyond bulk-import completion; no subscription or streaming surface.
+- No delivery-log or replay endpoint documented.
+x-evidence:
+  fetched: '2026-08-29'
+  url: https://docs.tastewise.io/
+  http_status: 200

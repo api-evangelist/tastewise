@@ -1,0 +1,71 @@
+generated: '2026-08-29'
+method: searched
+source: https://docs.tastewise.io/
+note: >-
+  Searched the API reference, the marketing site and the help center for versioning,
+  deprecation, SLA, changelog and status-page surfaces. Almost none exist. Recorded as
+  absent — no StatusPage or Deprecation pointer is emitted because neither surface is served.
+versioning:
+  scheme: none
+  current: null
+  evidence: >-
+    API paths are unversioned (https://api.tastewise.io/recipes/popular). No version header,
+    no date pinning, no version negotiation documented.
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  evidence: No deprecation or sunset policy is published in the API reference or elsewhere on the site.
+sla:
+  url: null
+  uptime_target: null
+  published: false
+  evidence: No public SLA or uptime commitment found.
+status_page:
+  url: null
+  published: false
+  probes:
+  - url: https://status.tastewise.io
+    status: 000
+    result: DNS does not resolve
+  - url: https://tastewise.io/status
+    status: 404
+  note: >-
+    No status page. The API does expose an unauthenticated health check at
+    GET https://api.tastewise.io/ping (returns "healthy"), which the docs explicitly
+    recommend for monitoring availability — a health endpoint, not a status page.
+health_check:
+  url: https://api.tastewise.io/ping
+  method: GET
+  auth_required: false
+  expected_body: healthy
+  verified: probed
+  probe_status: 200
+  fetched: '2026-08-29'
+changelog:
+  url: null
+  published: false
+  probes:
+  - url: https://tastewise.io/changelog
+    status: 404
+  - url: https://docs.tastewise.io/changelog
+    status: 403
+beta_operations:
+- path: /restaurants/match
+  label: '[Beta]'
+  source: https://docs.tastewise.io/
+- path: /restaurants/pricingAnalysis
+  label: '[Beta]'
+  source: https://docs.tastewise.io/
+deprecated_operations: []
+gaps:
+- No API versioning scheme at all — a breaking change has no announcement channel.
+- No deprecation policy, no Sunset/Deprecation header support.
+- No status page and no published SLA.
+- No changelog, so consumers cannot see what changed.
+x-evidence:
+  fetched: '2026-08-29'
+  docs_url: https://docs.tastewise.io/
+  docs_http_status: 200

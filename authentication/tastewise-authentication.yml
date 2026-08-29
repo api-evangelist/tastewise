@@ -1,0 +1,106 @@
+generated: '2026-08-29'
+method: searched
+source: https://docs.tastewise.io/
+docs: https://docs.tastewise.io/
+note: >-
+  Derived by hand from the provider's published API reference, not from an OpenAPI —
+  Tastewise publishes no machine-readable specification, so derive-authentication.py had
+  no spec to read. Every field below is quoted from docs.tastewise.io.
+summary:
+  auth_types:
+  - http-bearer
+  - apiKey
+  api_key_locations:
+  - header
+  oauth2_flows: []
+  oauth2: false
+  openid_connect: false
+  mutual_tls: false
+  multi_factor: true
+  note: >-
+    Authentication is two-factor at the credential level: a bearer API key identifies the
+    integration and a separate X-Customer-Id header identifies the tenant. Both are required
+    on every authenticated request.
+schemes:
+- name: BearerApiKey
+  type: http
+  scheme: bearer
+  in: header
+  parameter_name: Authorization
+  format: 'Authorization: Bearer <your-api-key>'
+  required: true
+  description: Bearer API key issued by Tastewise to the customer.
+- name: CustomerId
+  type: apiKey
+  in: header
+  parameter_name: X-Customer-Id
+  required: true
+  description: Tenant/customer identifier issued alongside the API key.
+alternative_formats:
+- name: combined-header
+  format: 'Authorization: Bearer <your-api-key>^customer-id'
+  description: >-
+    Some endpoints accept the API key and customer ID combined in a single Authorization
+    header, separated by a caret.
+  source: https://docs.tastewise.io/
+authorization_model:
+  style: route-permissions
+  description: >-
+    Authorization is not scope-based. Each API route requires a named permission to be
+    enabled on the customer's account; a key without the permission is rejected. Permissions
+    are granted commercially, per contract, not requested at runtime.
+  permissions:
+  - permission: recipes
+    routes: [/recipes]
+    description: Recipe search and discovery
+  - permission: restaurants
+    routes: [/restaurants, /k12]
+    description: Restaurant data and menus; K12 school foodservice data
+  - permission: restaurants_by_token
+    routes: [/restaurants/bestsellers, /restaurants/pricingAnalysis]
+    description: Bestseller analysis and price analysis (US only)
+  - permission: menus
+    routes: [/menus]
+    description: Menu item details
+  - permission: content_discovery
+    routes: [/content_discovery]
+    description: Social media content
+  - permission: motivations
+    routes: [/motivations]
+    description: Consumer motivations
+  - permission: flavour_combination
+    routes: [/flavor_combination]
+    description: Flavor pairing analysis
+  - permission: trend_performance
+    routes: [/trend_performance]
+    description: Trend tracking
+  - permission: trend_validation
+    routes: [/trend_validation]
+    description: Trend validation
+  - permission: widgets
+    routes: [/widgets]
+    description: Widget queries
+  - permission: insights
+    routes: [/insights]
+    description: Combined insights
+  - permission: operations
+    routes: [/operations]
+    description: Combined restaurant/K12 data
+unauthenticated_endpoints:
+- path: /ping
+  method: GET
+  description: Health check; explicitly documented as requiring no authentication.
+  verified: probed
+  probe:
+    url: https://api.tastewise.io/ping
+    status: 200
+    body: healthy
+    fetched: '2026-08-29'
+errors:
+  401: Unauthorized -- Either the API key, the Customer ID is wrong or you don't have access to the API.
+  403: Forbidden -- You are not allowed to perform the request.
+x-evidence:
+  fetched: '2026-08-29'
+  docs_url: https://docs.tastewise.io/
+  docs_http_status: 200
+  live_probe: https://api.tastewise.io/ping (200, "healthy")
