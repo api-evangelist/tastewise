@@ -1,0 +1,14 @@
+{
+  "repo": "tastewise",
+  "feeds": [
+    {
+      "source": "https://help.tastewise.io/knowledge",
+      "feed_url": "https://help.tastewise.io/knowledge",
+      "title": "",
+      "saved": 0,
+      "method": "none"
+    }
+  ],
+  "post_count": 0,
+  "fetched": "2026-08-30T22:33:40Z"
+}

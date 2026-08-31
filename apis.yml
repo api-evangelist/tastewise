@@ -22,6 +22,19 @@ tags:
 - Food and Beverage
 - Consumer Insights
 - Market Intelligence
+- Restaurant
+- Menus
+- Recipes
+- Trends
+- CPG
+- Artificial Intelligence
+- Data
+- Analytics
+tags_raw:
+- Company
+- Food and Beverage
+- Consumer Insights
+- Market Intelligence
 - Restaurants
 - Menus
 - Recipes
@@ -46,6 +59,13 @@ apis:
   humanURL: https://docs.tastewise.io/
   baseURL: https://api.tastewise.io
   tags:
+  - Food and Beverage
+  - Consumer Insights
+  - Restaurant
+  - Menus
+  - Recipes
+  - Trends
+  tags_raw:
   - Food and Beverage
   - Consumer Insights
   - Restaurants
