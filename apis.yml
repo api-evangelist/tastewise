@@ -11,6 +11,21 @@ description: 'Tastewise is a food and beverage consumer-intelligence platform th
   operations with webhook callbacks. Access is per-customer: a bearer API key plus an X-Customer-Id
   header, with per-route permissions granted per contract. Customers include Nestle and Mars.'
 url: https://raw.githubusercontent.com/api-evangelist/tastewise/refs/heads/main/apis.yml
+accessModel:
+  pricing: unknown
+  onboarding: approval
+  trial: false
+  try_now: false
+  public: false
+  label: Requires approval
+  confidence: medium
+  source:
+  - plans
+  - authentication
+  - rate-limits
+  - security
+  generated: '2026-09-03'
+  method: derived
 image: https://tastewise.io/wp-content/uploads/2024/01/favicon-150x150.png
 x-type: company
 x-source: harvest:secondary-market
