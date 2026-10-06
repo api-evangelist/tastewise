@@ -31,7 +31,7 @@ x-type: company
 x-source: harvest:secondary-market
 specificationVersion: '0.20'
 created: '2026-08-29'
-modified: '2026-08-29'
+modified: '2026-10-06'
 tags:
 - Company
 - Food and Beverage
@@ -106,6 +106,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- url: https://tastewise.io/blog/feed
+  type: BlogRSS
 - type: TrustCenter
   url: security/tastewise-trust-center.yml
 - type: DomainSecurity
